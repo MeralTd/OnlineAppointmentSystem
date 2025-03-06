@@ -12,7 +12,7 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250306143202_CreatedDB")]
+    [Migration("20250306145406_CreatedDB")]
     partial class CreatedDB
     {
         /// <inheritdoc />
@@ -107,8 +107,14 @@ namespace Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 3, 6, 17, 32, 2, 251, DateTimeKind.Local).AddTicks(2469),
+                            CreatedDate = new DateTime(2025, 3, 6, 17, 54, 6, 29, DateTimeKind.Local).AddTicks(8538),
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2025, 3, 6, 17, 54, 6, 29, DateTimeKind.Local).AddTicks(8566),
+                            Name = "User"
                         });
                 });
 
@@ -143,6 +149,26 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7676),
+                            Name = "Egzoz Gazı Ölçümü"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7703),
+                            Name = "Fren Test"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7706),
+                            Name = "Far Ayarı"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>

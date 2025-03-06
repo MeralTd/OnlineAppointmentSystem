@@ -26,7 +26,8 @@ public class OperationClaimEntityConfiguration : BaseConfiguration<OperationClai
         HashSet<OperationClaimEntity> seeds =
             new()
             {
-                new OperationClaimEntity { Id = ++id, Name = "Admin" }
+                new OperationClaimEntity { Id = ++id, Name = "Admin" },
+                new OperationClaimEntity { Id = ++id, Name = "User" }
             };
 
         return seeds;

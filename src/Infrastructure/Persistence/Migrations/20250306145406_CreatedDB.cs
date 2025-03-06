@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
@@ -130,7 +132,21 @@ namespace Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "OperationClaims",
                 columns: new[] { "Id", "CreatedDate", "DeletedDate", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2025, 3, 6, 17, 32, 2, 251, DateTimeKind.Local).AddTicks(2469), null, "Admin", null });
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 3, 6, 17, 54, 6, 29, DateTimeKind.Local).AddTicks(8538), null, "Admin", null },
+                    { 2, new DateTime(2025, 3, 6, 17, 54, 6, 29, DateTimeKind.Local).AddTicks(8566), null, "User", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "CreatedDate", "DeletedDate", "Name", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7676), null, "Egzoz Gazı Ölçümü", null },
+                    { 2, new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7703), null, "Fren Test", null },
+                    { 3, new DateTime(2025, 3, 6, 17, 54, 6, 30, DateTimeKind.Local).AddTicks(7706), null, "Far Ayarı", null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_ServiceId",

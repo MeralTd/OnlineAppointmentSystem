@@ -1,0 +1,46 @@
+using Application.Features.Users.Dtos;
+using Application.Interfaces.Repository;
+using Application.Wrappers.Results;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Enums.UserEnums;
+using MediatR;
+using Security.Hashing;
+
+namespace Application.Features.Users.Commands;
+
+public class CreateUser : IRequest<IDataResult<CreatedUserDto>>
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public bool IsActive { get; set; }
+    public UserTypeEnum Type { get; set; }
+    public GenderEnum Gender { get; set; }
+
+    public class CreateUserHandler : IRequestHandler<CreateUser, IDataResult<CreatedUserDto>>
+    {
+        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+
+        public CreateUserHandler(IMapper mapper, IUserRepository userRepository)
+        {
+            _mapper = mapper;
+            _userRepository = userRepository;
+        }
+
+        public async Task<IDataResult<CreatedUserDto>> Handle(CreateUser request, CancellationToken cancellationToken)
+        {
+            var user = _mapper.Map<UserEntity>(request);
+            var password = PasswordHelper.GeneratePassword();
+            HashingHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            await _userRepository.AddAsync(user);
+
+            var mappedModel = _mapper.Map<CreatedUserDto>(user);
+            return new SuccessDataResult<CreatedUserDto>(mappedModel);
+        }
+    }
+}

@@ -1,5 +1,6 @@
 using Application.Features.Authorizations.Dtos;
 using Application.Interfaces.Repository;
+using Application.Pipelines.Transaction;
 using Application.Wrappers.Results;
 using Domain.Entities;
 using MediatR;
@@ -9,7 +10,7 @@ using Security.JWT;
 
 namespace Application.Features.Authorizations.Commands;
 
-public class LoginUser : IRequest<IDataResult<LoggedResponseDto>>
+public class LoginUser : IRequest<IDataResult<LoggedResponseDto>>, ITransactionalRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }

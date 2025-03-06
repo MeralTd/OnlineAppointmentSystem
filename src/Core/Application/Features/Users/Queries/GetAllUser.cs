@@ -8,12 +8,12 @@ namespace Application.Features.Users.Queries;
 
 public class GetAllUser : IRequest<IDataResult<IEnumerable<UserDto>>>
 {
-    public class GetAllBySearchUserHandler : IRequestHandler<GetAllUser, IDataResult<IEnumerable<UserDto>>>
+    public class GetAllUserHandler : IRequestHandler<GetAllUser, IDataResult<IEnumerable<UserDto>>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GetAllBySearchUserHandler(IUserRepository userRepository, IMapper mapper)
+        public GetAllUserHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;

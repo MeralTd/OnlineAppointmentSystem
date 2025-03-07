@@ -11,12 +11,12 @@ namespace Application.Features.Users.Commands;
 
 public class CreateUser : IRequest<IDataResult<CreatedUserDto>>
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public bool IsActive { get; set; }
-    public UserTypeEnum Type { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string Email { get; set; }
+    public required string PhoneNumber { get; set; }
+    public required string Password { get; set; }
+    public required UserTypeEnum Type { get; set; }
     public GenderEnum Gender { get; set; }
 
     public class CreateUserHandler : IRequestHandler<CreateUser, IDataResult<CreatedUserDto>>
@@ -33,8 +33,7 @@ public class CreateUser : IRequest<IDataResult<CreatedUserDto>>
         public async Task<IDataResult<CreatedUserDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<UserEntity>(request);
-            var password = PasswordHelper.GeneratePassword();
-            HashingHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            HashingHelper.CreatePasswordHash(request.Password, out var passwordHash, out var passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             await _userRepository.AddAsync(user);

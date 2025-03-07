@@ -14,21 +14,18 @@ public class LoginUser : IRequest<IDataResult<LoggedResponseDto>>, ITransactiona
 {
     public string Email { get; set; }
     public string Password { get; set; }
-    public string IpAddress { get; set; }
 
     public class LoginUserHandler : IRequestHandler<LoginUser, IDataResult<LoggedResponseDto>>
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenHelper _tokenHelper;
         private readonly IUserOperationClaimRepository _userOperationClaimRepository;
-        private readonly TokenOptions _tokenOptions;
 
-        public LoginUserHandler(IUserRepository userRepository, ITokenHelper tokenHelper, IUserOperationClaimRepository userOperationClaimRepository, TokenOptions tokenOptions)
+        public LoginUserHandler(IUserRepository userRepository, ITokenHelper tokenHelper, IUserOperationClaimRepository userOperationClaimRepository)
         {
             _userRepository = userRepository;
             _tokenHelper = tokenHelper;
             _userOperationClaimRepository = userOperationClaimRepository;
-            _tokenOptions = tokenOptions;
         }
 
         public async Task<IDataResult<LoggedResponseDto>> Handle(LoginUser request, CancellationToken cancellationToken)

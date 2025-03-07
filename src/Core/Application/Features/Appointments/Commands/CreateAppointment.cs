@@ -10,7 +10,6 @@ namespace Application.Features.Appointments.Commands;
 public class CreateAppointment : IRequest<IDataResult<AppointmentEntity>>
 {
     public DateTime AppointmentDate { get; set; }
-    public AppointmentStatusEnum Status { get; set; }
     public int UserId { get; set; }
     public int ServiceId { get; set; }
 
@@ -28,7 +27,7 @@ public class CreateAppointment : IRequest<IDataResult<AppointmentEntity>>
         public async Task<IDataResult<AppointmentEntity>> Handle(CreateAppointment request, CancellationToken cancellationToken)
         {
             var appointment = _mapper.Map<AppointmentEntity>(request);
-
+            appointment.Status = AppointmentStatusEnum.Waiting;
             await _appointmentRepository.AddAsync(appointment);
 
             var mappedModel = _mapper.Map<AppointmentEntity>(appointment);

@@ -4,5 +4,7 @@ public enum AppointmentStatusEnum : byte
 {
     Approved = 1,
     Canceled = 2,
-    Completed = 3
+    Completed = 3,
+    Waiting = 4
+
 }

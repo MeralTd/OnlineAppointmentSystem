@@ -1,0 +1,762 @@
+﻿@model List<Application.Features.Users.Dtos.UserDto>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<h3 class="card-title align-items-start flex-column mb-xl-8">
+    <span class="card-label fw-bold fs-3 mb-1">Users</span>
+</h3>
+
+<div class="card">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-6">
+        <!--begin::Card title-->
+        <div class="card-title">
+            <!--begin::Search-->
+            <div class="d-flex align-items-center position-relative my-1">
+                <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search user" />
+            </div>
+            <!--end::Search-->
+        </div>
+        <!--begin::Card title-->
+        <!--begin::Card toolbar-->
+        <div class="card-toolbar">
+            <!--begin::Toolbar-->
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+
+
+                <!--begin::Add user-->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+                    <i class="ki-outline ki-plus fs-2"></i>Add User
+                </button>
+                <!--end::Add user-->
+            </div>
+            <!--end::Toolbar-->
+
+        </div>
+        <!--end::Card toolbar-->
+    </div>
+    <!--end::Card header-->
+    <!--begin::Card body-->
+    <div class="card-body py-4">
+        <!--begin::Table-->
+        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+            <thead>
+                <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+
+                    <th class="min-w-125px">User</th>
+                    <th class="min-w-125px">Phone Number</th>
+                    <th class="min-w-125px">Type</th>
+                    <th class="min-w-125px">Is Active</th>
+                    <th class="min-w-125px">Gender</th>
+                    <th class="text-end min-w-100px">Actions</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 fw-semibold" id="user_table_body">
+                @foreach (var user in Model)
+                {
+                    <tr id="tr_@user.Id" data-user-id="@user.Id">
+
+                        <td class="d-flex align-items-center">
+
+                            <!--begin::User details-->
+                            <div class="d-flex flex-column">
+                                <span class="text-gray-800 text-hover-primary mb-1">@user.FirstName @user.LastName</span>
+                                <span>@user.Email</span>
+                            </div>
+                            <!--begin::User details-->
+                        </td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.Type</td>
+                        <td>
+                            @if (user.IsActive)
+                            {
+                                <div class="badge badge-light-success fw-bold">Enabled</div>
+                            }
+                            else
+                            {
+                                <div class="badge badge-light-danger fw-bold">Disable</div>
+
+                            }
+                        </td>
+                        <td>@user.Gender</td>
+                        <td class="text-end">
+                            <a href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                Actions
+                                <i class="ki-outline ki-down fs-5 ms-1"></i>
+                            </a>
+                            <!--begin::Menu-->
+                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" class="menu-link px-3 editBtn">Edit</a>
+                                </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" class="menu-link px-3 deleteBtn" data-kt-users-table-filter="delete_row" data-id="@user.Id">Delete</a>
+
+                                </div>
+                                <!--end::Menu item-->
+                            </div>
+                            <!--end::Menu-->
+                        </td>
+                    </tr>
+
+
+                }
+
+            </tbody>
+        </table>
+        <!--end::Table-->
+    </div>
+    <!--end::Card body-->
+</div>
+
+
+<!--begin::Modal - Add task-->
+<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true" id="userAddModal">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_add_user_header">
+                <!--begin::Modal title-->
+                <h2 class="fw-bold">Add User</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body px-5 my-7">
+                <!--begin::Form-->
+                <form id="kt_modal_add_user_form" class="form" action="#">
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">First Name</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="firstName" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="First Name" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group
+
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Last Name</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="lastName" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Last Name" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Email</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Password</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="password" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Password" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+
+                        <div class="v-row mb-7">
+                            <label class="required fw-semibold fs-6 mb-2">Gender</label>
+                            <select class="form-select form-select-solid fw-bold" id="gender" name="gender" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
+                                <option></option>
+                                <option value="1">All</option>
+                                <option value="2">Female</option>
+                                <option value="3">Male</option>
+                            </select>
+                        </div>
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Phone Number</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" name="phoneNumber" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="123456788" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="mb-5">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-5">Role</label>
+                            <!--end::Label-->
+                            <!--begin::Roles-->
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="type" type="radio" value="1" id="kt_modal_update_role_option_0" checked='checked' />
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_0">
+                                        <div class="fw-bold text-gray-800">Admin</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <div class='separator separator-dashed my-5'></div>
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="type" type="radio" value="2" id="kt_modal_update_role_option_1" />
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_1">
+                                        <div class="fw-bold text-gray-800">User</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <!--end::Roles-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--end::Scroll-->
+                    <!--begin::Actions-->
+                    <div class="text-center pt-10">
+                        <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
+                        <button type="submit" class="btn btn-primary addUser" data-kt-users-modal-action="submit">
+                            <span class="indicator-label">Submit</span>
+                            <span class="indicator-progress">
+                                Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Add task-->
+
+
+
+
+
+<!--begin::Modal - Add task-->
+<div class="modal fade" id="kt_modal_update_user" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_update_user_header">
+                <!--begin::Modal title-->
+                <h2 class="fw-bold">Edit User</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body px-5 my-7">
+                <!--begin::Form-->
+                <form id="editUserForm" class="form" action="#">
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_update_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+
+                         <input type="hidden" name="id"/>
+
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">First Name</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="firstName" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="First Name" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group
+
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Last Name</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="lastName" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Last Name" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Email</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                       
+
+                        <div class="v-row mb-7">
+                            <label class="required fw-semibold fs-6 mb-2">Gender</label>
+                            <select class="form-select form-select-solid fw-bold" id="gender" name="gender" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
+                                <option></option>
+                                <option value="1">All</option>
+                                <option value="2">Female</option>
+                                <option value="3">Male</option>
+                            </select>
+                        </div>
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-2">Phone Number</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" name="phoneNumber" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="123456788" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="mb-5">
+                            <!--begin::Label-->
+                            <label class="required fw-semibold fs-6 mb-5">Role</label>
+                            <!--end::Label-->
+                            <!--begin::Roles-->
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="type" type="radio" value="1" id="kt_modal_update_role_option_0" checked='checked' />
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_0">
+                                        <div class="fw-bold text-gray-800">Admin</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <div class='separator separator-dashed my-5'></div>
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="type" type="radio" value="2" id="kt_modal_update_role_option_1" />
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_1">
+                                        <div class="fw-bold text-gray-800">User</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <!--end::Roles-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--end::Scroll-->
+                    <!--begin::Actions-->
+                    <div class="text-center pt-10">
+                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-primary" id="updateUserBtn" data-kt-users-modal-action="submit">
+                            <span class="indicator-label">Update</span>
+                            <span class="indicator-progress">
+                                Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Add task-->
+
+
+
+
+
+
+
+@section Scripts{
+
+
+    <script>
+        $(document).ready(function () {
+
+            var datatable;
+            var table = document.querySelector('#kt_table_users');
+
+            const element = document.getElementById('kt_modal_add_user');
+            const form = element.querySelector('#kt_modal_add_user_form');
+            const modal = new bootstrap.Modal(element);
+
+
+            datatable = $(table).DataTable({
+                "info": false,
+                "paging": true,
+               
+
+            });
+
+
+            // Form submit olayını yakala
+            $("#kt_modal_add_user_form").on("submit", function (e) {
+                e.preventDefault(); // Sayfanın yenilenmesini engeller
+
+                // Form verilerini al
+                var formData = $(this).serialize();
+
+                // AJAX isteği gönder
+                $.ajax({
+                    url: "/User/AddUser",
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        console.log(response)
+                        // Eğer kullanıcı başarıyla eklenmişse
+                        if (response.success) {
+                            // Yeni kullanıcıyı tabloya ekle
+                            var newUser = response.data; // Backend'den gelen yeni kullanıcı bilgisi
+
+                            // Kullanıcıyı tabloya ekle
+                            var userRow = `<tr id="tr_${newUser.id}">
+
+                                                        <td class="d-flex align-items-center">
+
+                                                            <div class="d-flex flex-column">
+                                                                          <span class="text-gray-800 text-hover-primary mb-1">${newUser.firstName} ${newUser.lastName}</span>
+                                                                        <span>${newUser.email}</span>
+                                                            </div>
+                                                        </td>
+                                                                <td>${newUser.phoneNumber}</td>
+                                                                <td>${newUser.type}</td>
+                                                       <td>
+                                                       ${newUser.isActive
+                                    ? '<div class="badge badge-light-success fw-bold">Enabled</div>'
+                                    : '<div class="badge badge-light-danger fw-bold">Disabled</div>'}
+                                                        </td>
+                                                                <td>${newUser.gender}</td>
+                                                        <td class="text-end">
+                                                            <a href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                                Actions
+                                                                <i class="ki-outline ki-down fs-5 ms-1"></i>
+                                                            </a>
+                                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                                                <div class="menu-item px-3">
+                                                                    <a href="#" class="menu-link px-3">Edit</a>
+                                                                </div>
+
+                                                                <div class="menu-item px-3">
+                                                                            <a href="#" class="menu-link px-3 deleteBtn" data-kt-users-table-filter="delete_row" data-id="${newUser.id}">Delete</a>
+
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    `;
+
+
+                            // Tabloya yeni satırı ekle
+                            $("#user_table_body").append(userRow);
+
+                            // Modal kapanmadan önce işlemi sonlandırma
+                            // Modal'ı kapat
+                            $('#kt_modal_add_user').modal('hide');
+
+
+                            // Başarı mesajı
+                            toastr["success"]("User added successfully!");
+
+                            // Formu temizle
+                            $("#kt_modal_add_user_form")[0].reset();
+
+                        } else {
+                            // Hata mesajı
+                            toastr["error"]("Error adding user: " + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // AJAX hatası
+                        toastr["error"]("An error occurred: " + error);
+                    }
+                });
+            });
+
+            //$(".deleteBtn").click(function () {
+            //    var userID = $(this).data('id'); // Get user ID
+
+
+
+            //    Swal.fire({
+            //        text: "Are you sure you want to delete?",
+            //        icon: "warning",
+            //        showCancelButton: true,
+            //        buttonsStyling: false,
+            //        confirmButtonText: "Yes, delete!",
+            //        cancelButtonText: "No, cancel",
+            //        customClass: {
+            //            confirmButton: "btn fw-bold btn-danger",
+            //            cancelButton: "btn fw-bold btn-active-light-primary"
+            //        }
+            //    }).then(function (result) {
+            //        if (result.isConfirmed) { // Check if the user clicked 'Yes'
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: '/User/DeleteUser?id=' + userID, // Ensure this URL is correct
+            //                success: function (data) {
+            //                    if (data.success) { // Check if deletion is successful
+            //                        toastr["success"]("Kullanıcı başarıyla silindi");
+            //                        // Remove the user row from the table
+            //                        $("#tr_" + userID).fadeOut(400, function () { $(this).remove(); });
+            //                    } else {
+            //                        toastr["error"]('Hata Oluştu! İşlem sırasında hata oluştu.');
+            //                    }
+            //                },
+            //                error: function () {
+            //                    toastr["error"]("'Hata! Sunucuyla iletişimde hata oluştu. ");
+
+            //                }
+            //            });
+            //        }
+            //    });
+            //});
+
+            $(document).on('click', '.deleteBtn', function () {
+                var userID = $(this).data('id'); // Get user ID
+
+
+
+                Swal.fire({
+                    text: "Are you sure you want to delete?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes, delete!",
+                    cancelButtonText: "No, cancel",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { // Check if the user clicked 'Yes'
+                        $.ajax({
+                            type: 'POST',
+                            url: '/User/DeleteUser?id=' + userID, // Ensure this URL is correct
+                            success: function (data) {
+                                if (data.success) { // Check if deletion is successful
+                                    toastr["success"]("Kullanıcı başarıyla silindi");
+                                    // Remove the user row from the table
+                                    $("#tr_" + userID).fadeOut(400, function () { $(this).remove(); });
+                                } else {
+                                    toastr["error"]('Hata Oluştu! İşlem sırasında hata oluştu.');
+                                }
+                            },
+                            error: function () {
+                                toastr["error"]("'Hata! Sunucuyla iletişimde hata oluştu. ");
+
+                            }
+                        });
+                    }
+                });
+            });
+
+
+            // Attach click event to the Edit button to load user data into the modal
+            $(document).on('click', '.editBtn', function () {
+                var row = $(this).closest('tr');
+                var userId = row.data('user-id');
+                
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/User/GetUser?id=' + userId, 
+                    success: function (response) {
+                        if (response.success) { // Check if deletion is successful
+
+                            $('#editUserForm input[name="id"]').val(response.data.id);  // id
+                            $('#editUserForm input[name="firstName"]').val(response.data.firstName);  // First Name
+                            $('#editUserForm input[name="lastName"]').val(response.data.lastName);  // Last Name
+                            $('#editUserForm input[name="email"]').val(response.data.email);  // Email
+                            $('#editUserForm input[name="phoneNumber"]').val(response.data.phoneNumber);  // Phone Number
+                            $('#editUserForm select[name="gender"]').val(response.data.gender).trigger('change');  // Gender
+
+
+                            $('input[name="type"][value="' + response.data.type + '"]').prop('checked', true);  // Role (Admin/User)
+
+                            $('#kt_modal_update_user').modal('show');
+
+                        } else {
+                            toastr["error"]('Hata Oluştu! İşlem sırasında hata oluştu.');
+                        }
+                    },
+                    error: function () {
+                        toastr["error"]("'Hata! Sunucuyla iletişimde hata oluştu. ");
+
+                    }
+                });
+
+                $('#kt_modal_update_user').modal('show');
+
+            });
+
+            // Handle form submission
+            // Form submit olayını yakala
+            $("#editUserForm").on("submit", function (e) {
+                e.preventDefault(); // Sayfanın yenilenmesini engeller
+
+                 // Form verilerini al
+                var formData = $(this).serialize();
+
+                // Perform AJAX request to save the data
+                $.ajax({
+                    url: "/User/UpdateUser",
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Update the table with new user data
+                            var row = $('#kt_table_users').find('tr[data-user-id="' + formData.userId + '"]');
+                            row.find('.firstName').text(formData.firstName);
+                            row.find('.lastName').text(formData.lastName);
+
+                            // Hide the modal
+                            $('#kt_modal_update_user').modal('hide');
+
+                            // Show success message
+                            Swal.fire({
+                                text: 'User updated successfully!',
+                                icon: 'success',
+                                confirmButtonText: 'Okay',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary',
+                                }
+                            });
+                        } else {
+                            // Show error message
+                            Swal.fire({
+                                text: response.message || 'There was an error updating the user.',
+                                icon: 'error',
+                                confirmButtonText: 'Try Again',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary',
+                                }
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Show error message in case of failure
+                        Swal.fire({
+                            text: 'An unexpected error occurred.',
+                            icon: 'error',
+                            confirmButtonText: 'Okay',
+                            customClass: {
+                                confirmButton: 'btn btn-primary',
+                            }
+                        });
+                    }
+                });
+            });
+
+
+
+
+            // Cancel button handler
+            const cancelButton = element.querySelector('[data-kt-users-modal-action="cancel"]');
+            cancelButton.addEventListener('click', e => {
+                e.preventDefault();
+
+                Swal.fire({
+                    text: "Are you sure you would like to cancel?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes, cancel it!",
+                    cancelButtonText: "No, return",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light"
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        form.reset(); // Reset form
+                        modal.hide();
+                    } else if (result.dismiss === 'cancel') {
+                        Swal.fire({
+                            text: "Your form has not been cancelled!.",
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            }
+                        });
+                    }
+                });
+            });
+
+
+
+
+        });
+    </script>
+
+
+
+}

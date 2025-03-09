@@ -10,6 +10,7 @@ namespace Application.Features.Appointments.Commands;
 public class UpdateAppointment : IRequest<IResponseResult>
 {
     public int Id { get; set; }
+    public DateTime AppointmentDate { get; set; }
     public AppointmentStatusEnum Status { get; set; }
     public int UserId { get; set; }
     public int ServiceId { get; set; }

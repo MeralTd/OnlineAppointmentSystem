@@ -17,11 +17,15 @@ public class CreateAppointment : IRequest<IDataResult<AppointmentEntity>>
     {
         private readonly IMapper _mapper;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IServiceRepository _serviceRepository;
 
-        public CreateAppointmentHandler(IMapper mapper, IAppointmentRepository appointmentRepository)
+        public CreateAppointmentHandler(IMapper mapper, IAppointmentRepository appointmentRepository, IUserRepository userRepository, IServiceRepository serviceRepository)
         {
             _mapper = mapper;
             _appointmentRepository = appointmentRepository;
+            _userRepository = userRepository;
+            _serviceRepository = serviceRepository;
         }
 
         public async Task<IDataResult<AppointmentEntity>> Handle(CreateAppointment request, CancellationToken cancellationToken)
@@ -30,7 +34,12 @@ public class CreateAppointment : IRequest<IDataResult<AppointmentEntity>>
             appointment.Status = AppointmentStatusEnum.Waiting;
             await _appointmentRepository.AddAsync(appointment);
 
+
+            appointment.User = await _userRepository.GetAsync(x => x.Id == request.UserId);
+            appointment.Service = await _serviceRepository.GetAsync(x => x.Id == request.ServiceId);
+
             var mappedModel = _mapper.Map<AppointmentEntity>(appointment);
+
             return new SuccessDataResult<AppointmentEntity>(mappedModel);
         }
     }

@@ -3,6 +3,7 @@ using Application.Interfaces.Repository;
 using Application.Wrappers.Results;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Appointments.Queries;
 
@@ -21,9 +22,12 @@ public class GetAllAppointment : IRequest<IDataResult<IEnumerable<AppointmentDto
 
         public async Task<IDataResult<IEnumerable<AppointmentDto>>> Handle(GetAllAppointment request, CancellationToken cancellationToken)
         {
-            var appointments = await _appointmentRepository.GetAllAsync();
+            var appointments = await _appointmentRepository.GetAllAsync(include: query => query.Include(a => a.User).Include(a => a.Service));
             if (appointments.Count <= 0)
                 return new ErrorDataResult<IEnumerable<AppointmentDto>>("No appointments found");
+
+
+
 
             var mappedModel = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
             return new SuccessDataResult<IEnumerable<AppointmentDto>>(mappedModel);

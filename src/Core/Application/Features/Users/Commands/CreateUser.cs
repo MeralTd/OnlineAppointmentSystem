@@ -32,6 +32,11 @@ public class CreateUser : IRequest<IDataResult<CreatedUserDto>>
 
         public async Task<IDataResult<CreatedUserDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
+            var userControl = await _userRepository.GetAsync(x => x.Email == request.Email);
+            if (userControl != null)
+                return new ErrorDataResult<CreatedUserDto>("A user with this email address already exists");
+
+
             var user = _mapper.Map<UserEntity>(request);
             HashingHelper.CreatePasswordHash(request.Password, out var passwordHash, out var passwordSalt);
             user.PasswordHash = passwordHash;

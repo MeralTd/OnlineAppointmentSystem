@@ -25,6 +25,7 @@ public class DeleteUser : IRequest<IResponseResult>
                 if (offer == null)
                     return new ErrorResult("User not found");
 
+
                 await _userRepository.RemoveAsync(offer);
                 return new SuccessResult("User deleted");
             }

@@ -37,8 +37,10 @@
                         <th class="min-w-200px">Appointment Date</th>
                         <th class="min-w-150px">Status</th>
                         @if (userSession.Rol == "Admin")
-                        {<th class="min-w-150px">User Name</th> }
-                        
+                        {
+                            <th class="min-w-150px">User Name</th>
+                        }
+
                         <th class="min-w-150px">Service</th>
                         <th class="min-w-100px text-end">Actions</th>
                     </tr>
@@ -47,67 +49,73 @@
                 <!--begin::Table body-->
                 <tbody id="appointment_table_body">
 
-                    @foreach (var item in Model)
+                    @if (Model != null && Model.Count > 0)
                     {
-                        <tr id="tr_@item.Id" data-appointment-id="@item.Id">
-                            <td>
-                                <div class="d-flex align-items-center">
+                        @foreach (var item in Model)
+                        {
+                            <tr id="tr_@item.Id" data-appointment-id="@item.Id">
+                                <td>
+                                    <div class="d-flex align-items-center">
 
-                                    <div class="d-flex justify-content-start flex-column">
-                                        <span class="text-gray-900 fw-bold text-hover-primary fs-6">@item.AppointmentDate</span>
+                                        <div class="d-flex justify-content-start flex-column">
+                                            <span class="text-gray-900 fw-bold text-hover-primary fs-6">@item.AppointmentDate</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                               @if(item.Status.ToString() == "Approved")
-                                {
-                                    <span class="badge badge-light-primary">@item.Status</span>
-                                }else if (item.Status.ToString() == "Completed")
-                                {
-                                    <span class="badge badge-light-success">@item.Status</span>
-
-                                }else if (item.Status.ToString() == "Canceled")
-                                {
-                                    <span class="badge badge-light-danger">@item.Status</span>
-                                }
-                                else
-                                {
-                                     <span class="badge badge-light-warning">@item.Status</span>
-
-                                }
-
-                            </td>
-                            @if (userSession.Rol == "Admin")
-                            { 
-                            <td>
-                                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">@item.User.FirstName @item.User.LastName</span>
-                            </td>
-                            }
-                            <td>
-                                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">@item.Service.Name</span>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-end flex-shrink-0">
-                                   
-                                    @if (item.Status.ToString() == "Waiting")
+                                </td>
+                                <td>
+                                    @if (item.Status.ToString() == "Approved")
                                     {
-                                        <a href="#" class="btn btn-sm btn-primary align-self-center me-1 changeStatus" data-status="1">Confirm</a>
+                                        <span class="badge badge-light-primary">@item.Status</span>
+                                    }
+                                    else if (item.Status.ToString() == "Completed")
+                                    {
+                                        <span class="badge badge-light-success">@item.Status</span>
+
+                                    }
+                                    else if (item.Status.ToString() == "Canceled")
+                                    {
+                                        <span class="badge badge-light-danger">@item.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-light-warning">@item.Status</span>
+
                                     }
 
-                                     @if (item.Status.ToString() == "Approved")
-                                    {
-                                        <a href="#" class="btn btn-sm btn-success align-self-center me-1 changeStatus" data-status="3">Complete</a>
-                                    }
+                                </td>
+                                @if (userSession.Rol == "Admin")
+                                {
+                                    <td>
+                                        <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">@item.User.FirstName @item.User.LastName</span>
+                                    </td>
+                                }
+                                <td>
+                                    <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">@item.Service.Name</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-end flex-shrink-0">
 
-                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 editAppointmentBtn" >
-                                        <i class="ki-outline ki-pencil fs-2"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm deleteBtn"  data-id="@item.Id">
-                                        <i class="ki-outline ki-trash fs-2"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                                        @if (item.Status.ToString() == "Waiting")
+                                        {
+                                            <a href="#" class="btn btn-sm btn-primary align-self-center me-1 changeStatus" data-status="1">Confirm</a>
+                                        }
+
+                                        @if (item.Status.ToString() == "Approved")
+                                        {
+                                            <a href="#" class="btn btn-sm btn-success align-self-center me-1 changeStatus" data-status="3">Complete</a>
+                                        }
+
+                                        <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 editAppointmentBtn">
+                                            <i class="ki-outline ki-pencil fs-2"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm deleteBtn" data-id="@item.Id">
+                                            <i class="ki-outline ki-trash fs-2"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
 
                     }
 
@@ -142,35 +150,23 @@
                             <input type="datetime-local" id="appointmentDate" name="appointmentDate" class="form-control" required>
                         </div>
 
-@*
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select id="status" name="status" class="form-select" required>
-                                <option value="1">Approved</option>
-                                <option value="2">Canceled</option>
-                                <option value="3">Completed</option>
-                                <option value="4">Waiting</option>
+               
 
-
-                            </select>
-                        </div>*@
-
-                        @if(userSession.Rol == "Admin")
-								{
+                        @if (userSession.Rol == "Admin")
+                        {
                             <div class="mb-3">
                                 <label for="userId" class="form-label">User</label>
                                 <select id="userId" name="userId" class="form-select" required>
-                                    <!-- Users will be populated here via AJAX -->
                                 </select>
                             </div>
-                        }else
+                        }
+                        else
                         {
-                            <input type="hidden" name="userId" value="@userSession.GetUser().Id"/>
+                            <input type="hidden" name="userId" value="@userSession.GetUser().Id" />
                         }
                         <div class="mb-3">
                             <label for="serviceId" class="form-label">Service </label>
                             <select id="serviceId" name="serviceId" class="form-select" required>
-                                <!-- Services will be populated here via AJAX -->
                             </select>
                         </div>
                     </div>
@@ -196,35 +192,35 @@
     <div class="modal-dialog modal-dialog-centered mw-650px" role="document">
         <div class="modal-content">
             <div class="modal-header">
-               
 
-                 <h2 class="fw-bold">Update Appointment</h2>
+
+                <h2 class="fw-bold">Update Appointment</h2>
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
             </div>
             <div class="modal-body">
                 <form id="updateAppointmentForm">
-                                        <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_update_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_update_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
 
-                    <div class="mb-3">
-                        <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="datetime-local" class="form-control" name="appointmentDate" required />
-                    </div>
-
-                     @if (userSession.Rol == "Admin")
-                        { 
                         <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select id="status_update" name="status" class="form-select" required>
-                                <option value="1">Approved</option>
-                                <option value="2">Canceled</option>
-                                <option value="3">Completed</option>
-                                <option value="4">Waiting</option>
-
-
-                            </select>
+                            <label for="appointmentDate" class="form-label">Appointment Date</label>
+                            <input type="datetime-local" class="form-control" name="appointmentDate" required />
                         </div>
+
+                        @if (userSession.Rol == "Admin")
+                        {
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status_update" name="status" class="form-select" required>
+                                    <option value="1">Approved</option>
+                                    <option value="2">Canceled</option>
+                                    <option value="3">Completed</option>
+                                    <option value="4">Waiting</option>
+
+
+                                </select>
+                            </div>
 
 
                             <div class="mb-3">
@@ -236,9 +232,9 @@
                         }
                         else
                         {
-                            
-                            <input  name="status" type="hidden"/>
-                             <input  name="userId" type="hidden" value="@userSession.GetUser().Id"/>
+
+                            <input name="status" type="hidden" />
+                            <input name="userId" type="hidden" value="@userSession.GetUser().Id" />
 
                         }
                         <div class="mb-3">
@@ -247,10 +243,10 @@
                                 <!-- Services will be populated here via AJAX -->
                             </select>
                         </div>
-                                            <input type="hidden" name="id" /> <!-- Hidden field to store the appointment ID -->
+                        <input type="hidden" name="id" /> <!-- Hidden field to store the appointment ID -->
 
-                        </div>
-                     <div class="text-center pt-10">
+                    </div>
+                    <div class="text-center pt-10">
                         <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
                         <button type="submit" class="btn btn-primary">
                             <span class="indicator-label">Update Appointment</span>
@@ -279,77 +275,65 @@
         $(document).ready(function () {
 
             $(".deleteBtn").click(function () {
-            var id = $(this).data('id'); // Get user ID
+                var id = $(this).data('id'); 
 
 
-            Swal.fire({
-                text: "Are you sure you want to delete?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, delete!",
-                cancelButtonText: "No, cancel",
-                customClass: {
-                    confirmButton: "btn fw-bold btn-danger",
-                    cancelButton: "btn fw-bold btn-active-light-primary"
-                }
-            }).then(function (result) {
-                if (result.isConfirmed) { // Check if the user clicked 'Yes'
-                    $.ajax({
-                        type: 'POST',
-                        url: '/Appointment/DeleteAppointment?id=' + id, // Ensure this URL is correct
-                        success: function (data) {
-                            if (data.success) { // Check if deletion is successful
-                                toastr["success"]("Appointment deleted successfully");
-                                // Remove the user row from the table
-                                $("#tr_" + id).fadeOut(400, function () { $(this).remove(); });
-                            } else {
-                                toastr["error"]('An error occurred during the operation.');
+                Swal.fire({
+                    text: "Are you sure you want to delete?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes, delete!",
+                    cancelButtonText: "No, cancel",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { 
+                        $.ajax({
+                            type: 'POST',
+                            url: '/Appointment/DeleteAppointment?id=' + id, 
+                            success: function (data) {
+                                if (data.success) { 
+                                    toastr["success"]("Appointment deleted successfully");
+
+                                    $("#tr_" + id).fadeOut(400, function () { $(this).remove(); });
+                                } else {
+                                    toastr["error"]('An error occurred during the operation.');
+                                }
+                            },
+                            error: function () {
+                                toastr["error"]("'Error! An error occurred while communicating with the server. ");
+
                             }
-                        },
-                        error: function () {
-                            toastr["error"]("'Error! An error occurred while communicating with the server. ");
-
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
-        });
 
 
 
 
-
-
-
-
-
-
-
-
-            // Trigger AJAX request to fetch users and services when the modal is shown
             $('#appointmentModal').on('show.bs.modal', function () {
-                // Make an AJAX call to get users and services
                 $.ajax({
                     type: "GET",
-                    url: "/Appointment/GetUsersAndServices", // Adjust this URL to your actual controller action
+                    url: "/Appointment/GetUsersAndServices", 
                     success: function (response) {
-                        // Fill the user select dropdown
                         if (response.users && response.users.length > 0) {
                             var userOptions = '<option value="">Select a User</option>';
                             $.each(response.users, function (index, user) {
                                 userOptions += `<option value="${user.id}">${user.firstName} ${user.lastName}</option>`;
                             });
-                            $('#userId').html(userOptions); // Populate userId select
+                            $('#userId').html(userOptions); 
                         }
 
-                        // Fill the service select dropdown
                         if (response.services && response.services.length > 0) {
                             var serviceOptions = '<option value="">Select a Service</option>';
                             $.each(response.services, function (index, service) {
                                 serviceOptions += `<option value="${service.id}">${service.name}</option>`;
                             });
-                            $('#serviceId').html(serviceOptions); // Populate serviceId select
+                            $('#serviceId').html(serviceOptions); 
                         }
                     },
                     error: function (xhr, status, error) {
@@ -358,87 +342,72 @@
                 });
             });
 
-            // Handle form submission (add appointment)
+
+
             $('#addAppointmentForm').on('submit', function (e) {
                 e.preventDefault();
 
-
-                //var appointmentData = {
-                //    appointmentDate: $('#appointmentDate').val(),
-                //    userId: $('#userId').val(),
-                //    serviceId: $('#serviceId').val()
-                //};
                 var formData = $(this).serialize();
 
 
                 $.ajax({
                     type: "POST",
-                    url: "/Appointment/AddAppointment",  // Adjust to the correct URL
+                    url: "/Appointment/AddAppointment",  
                     data: formData,
                     success: function (response) {
                         if (response.success) {
                             toastr["success"]('Appointment added successfully!');
-                            // Optionally, refresh the appointments table or update UI
+                           
+                            var newAppointment = response.data; 
 
-                             // Yeni kullanıcıyı tabloya ekle
-                            var newAppointment = response.data; // Backend'den gelen yeni kullanıcı bilgisi
-
-                            // Kullanıcıyı tabloya ekle
                             var appointmentRow = `<tr id="tr_${newAppointment.id}" data-appointment-id="${newAppointment.id}">
-                                    <td>
-                                        <div class="d-flex align-items-center">
+                                            <td>
+                                                <div class="d-flex align-items-center">
 
-                                            <div class="d-flex justify-content-start flex-column">
-                                                        <span class="text-gray-900 fw-bold text-hover-primary fs-6">${newAppointment.appointmentDate}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">${newAppointment.status}</span>
-                                    </td>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                                <span class="text-gray-900 fw-bold text-hover-primary fs-6">${newAppointment.appointmentDate}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                        <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">${newAppointment.status}</span>
+                                            </td>
 
-                                        ${
-        userType === "Admin"
-        ? `<td>
-                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">
-                    ${newAppointment.user?.firstName} ${newAppointment.user?.lastName}
-                </span>
-           </td>`
-        : ""
-    }
+                                                ${userType === "Admin"
+                                                ? `<td>
+                                                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">
+                                                ${newAppointment.user?.firstName} ${newAppointment.user?.lastName}
+                                                </span>
+                                                </td>`
+                                                : ""
+                                                }
 
-                                    
-                                    <td>
-                                                <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">${newAppointment.service?.name}</span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex justify-content-end flex-shrink-0">
-                                          
-                                            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 editAppointmentBtn">
-                                                <i class="ki-outline ki-pencil fs-2"></i>
-                                            </a>
-                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" id="deleteBtn" data-id="${newAppointment.id}">
-                                                <i class="ki-outline ki-trash fs-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                                    `;
+                                            <td>
+                                                        <span class="text-gray-900 fw-bold text-hover-primary d-block fs-6">${newAppointment.service?.name}</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-end flex-shrink-0">
+
+                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 editAppointmentBtn">
+                                                        <i class="ki-outline ki-pencil fs-2"></i>
+                                                    </a>
+                                                            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" id="deleteBtn" data-id="${newAppointment.id}">
+                                                        <i class="ki-outline ki-trash fs-2"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        `;
 
 
-                            // Tabloya yeni satırı ekle
                             $("#appointment_table_body").append(appointmentRow);
 
-                            // Modal kapanmadan önce işlemi sonlandırma
-                            // Modal'ı kapat
-                            $('#appointmentModal').modal('hide'); // Close the modal
+                           
+                            $('#appointmentModal').modal('hide'); 
 
 
-
-                            // Başarı mesajı
                             toastr["success"]("Appointment added successfully!");
 
-                            // Formu temizle
                             $("#addAppointmentForm")[0].reset();
 
 
@@ -456,127 +425,118 @@
         });
 
 
-   
+
 
         $(document).ready(function () {
 
 
-    // Handle edit button click to populate modal with current data
-    $('.editAppointmentBtn').on('click', function () {
-        var row = $(this).closest('tr');
+            $('.editAppointmentBtn').on('click', function () {
+                var row = $(this).closest('tr');
                 var appointmentId = row.data('appointment-id');
 
-                                                     populateUserAndServiceDropdowns();
+                populateUserAndServiceDropdowns();
 
-        // Fetch the current appointment data
-        $.ajax({
-             type: 'POST',
-              url: '/Appointment/GetAppointment?id=' + appointmentId, 
-            success: function (response) {
-                if (response.success) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Appointment/GetAppointment?id=' + appointmentId,
+                    success: function (response) {
+                        if (response.success) {
 
-                    
-                    // Optionally, you can populate users and services dropdown here if needed
 
-                    // Populate modal form fields with the current data
-                    $('#updateAppointmentForm input[name="id"]').val(response.data.id);  // id
-                    $('#updateAppointmentForm input[name="appointmentDate"]').val(response.data.appointmentDate); 
-                    $('#updateAppointmentForm select[id="serviceId_update"]').val(response.data.serviceId);  // id
+                            $('#updateAppointmentForm input[name="id"]').val(response.data.id);  
+                            $('#updateAppointmentForm input[name="appointmentDate"]').val(response.data.appointmentDate);
+                            $('#updateAppointmentForm select[id="serviceId_update"]').val(response.data.serviceId); 
 
-                    if(userType === "Admin") {
-                           $('#updateAppointmentForm select[id="userId_update"]').val(response.data.userId).trigger('change'); 
-                    $('#updateAppointmentForm select[name="status_update"]').val(response.data.status).trigger('change'); 
-                    }else {
-                          $('#updateAppointmentForm input[id="userId"]').val(response.data.userId); 
-                         $('#updateAppointmentForm input[id="status"]').val(response.data.status); 
+                            if (userType === "Admin") {
+                                $('#updateAppointmentForm select[id="userId_update"]').val(response.data.userId).trigger('change');
+                                $('#updateAppointmentForm select[name="status_update"]').val(response.data.status).trigger('change');
+                            } else {
+                                $('#updateAppointmentForm input[id="userId"]').val(response.data.userId);
+                                $('#updateAppointmentForm input[id="status"]').val(response.data.status);
+                            }
+
+
+                            $('#updateAppointmentModal').modal('show');
+                        } else {
+                            toastr["error"]('Error loading appointment data');
+                        }
+                    },
+                    error: function () {
+                        toastr["error"]('Error fetching appointment data');
                     }
-                 
+                });
+            });
 
 
-                    
-                    // Show the modal
-                    $('#updateAppointmentModal').modal('show');
-                } else {
-                    toastr["error"]('Error loading appointment data');
-                }
-            },
-            error: function () {
-                toastr["error"]('Error fetching appointment data');
-            }
-        });
-    });
 
-    // Handle form submission to update appointment
-    $('#updateAppointmentForm').on('submit', function (e) {
-        e.preventDefault();
- var formData = $(this).serialize();
+            $('#updateAppointmentForm').on('submit', function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
 
-        // Send update request via AJAX
-        $.ajax({
-            type: "POST",
-            url: "/Appointment/UpdateAppointment",  // Adjust to the correct URL
-            data: formData, // Send data as JSON string
-            success: function (response) {
-                if (response.success) {
-                    toastr["success"]('Appointment updated successfully!');
-                    $('#updateAppointmentModal').modal('hide');  // Close the modal
-                    location.reload();  // Reload the page or refresh the table of appointments
-                } else {
-                    toastr["error"]('There was an issue updating the appointment.');
-                }
-            },
-            error: function () {
-                toastr["error"]('Error occurred while updating the appointment');
-            }
-        });
-    });
-        });
-
-
-// Function to populate user and service dropdowns (if needed)
-function populateUserAndServiceDropdowns() {
-    $.ajax({
-        type: "GET",
-        url: "/Appointment/GetUsersAndServices", 
-        success: function (response) {
-           if (response.users && response.users.length > 0) {
-                            var userOptions = '<option value="">Select a User</option>';
-                            $.each(response.users, function (index, user) {
-                                userOptions += `<option value="${user.id}">${user.firstName} ${user.lastName}</option>`;
-                            });
-                            $('#userId_update').html(userOptions); // Populate userId select
+                $.ajax({
+                    type: "POST",
+                    url: "/Appointment/UpdateAppointment", 
+                    data: formData, 
+                    success: function (response) {
+                        if (response.success) {
+                            toastr["success"]('Appointment updated successfully!');
+                            $('#updateAppointmentModal').modal('hide');  
+                            location.reload();  
+                        } else {
+                            toastr["error"]('There was an issue updating the appointment.');
                         }
-
-                        // Fill the service select dropdown
-                        if (response.services && response.services.length > 0) {
-                            var serviceOptions = '<option value="">Select a Service</option>';
-                            $.each(response.services, function (index, service) {
-                                serviceOptions += `<option value="${service.id}">${service.name}</option>`;
-                            });
-                            $('#serviceId_update').html(serviceOptions); // Populate serviceId select
-                        }
+                    },
+                    error: function () {
+                        toastr["error"]('Error occurred while updating the appointment');
+                    }
+                });
+            });
+        });
 
 
-        },
-        error: function () {
-            alert('Error fetching users and services');
+        function populateUserAndServiceDropdowns() {
+            $.ajax({
+                type: "GET",
+                url: "/Appointment/GetUsersAndServices",
+                success: function (response) {
+                    if (response.users && response.users.length > 0) {
+                        var userOptions = '<option value="">Select a User</option>';
+                        $.each(response.users, function (index, user) {
+                            userOptions += `<option value="${user.id}">${user.firstName} ${user.lastName}</option>`;
+                        });
+                        $('#userId_update').html(userOptions); 
+                    }
+
+                   
+                    if (response.services && response.services.length > 0) {
+                        var serviceOptions = '<option value="">Select a Service</option>';
+                        $.each(response.services, function (index, service) {
+                            serviceOptions += `<option value="${service.id}">${service.name}</option>`;
+                        });
+                        $('#serviceId_update').html(serviceOptions); 
+                    }
+
+
+                },
+                error: function () {
+                    alert('Error fetching users and services');
+                }
+            });
         }
-    });
-}
 
 
-  $(".changeStatus").click(function () {
-      var row = $(this).closest('tr');
-                var appointmentId = row.data('appointment-id');
+        $(".changeStatus").click(function () {
+            var row = $(this).closest('tr');
+            var appointmentId = row.data('appointment-id');
 
-            var status = $(this).data('status'); 
+            var status = $(this).data('status');
 
-              var appointmentData = {
-                    Id: appointmentId,
-                    Status:status,
-                };
+            var appointmentData = {
+                Id: appointmentId,
+                Status: status,
+            };
 
-                console.log(appointmentData)
+            console.log(appointmentData)
 
             Swal.fire({
                 text: "Are you sure you want to change your appointment status??",
@@ -590,15 +550,14 @@ function populateUserAndServiceDropdowns() {
                     cancelButton: "btn fw-bold btn-active-light-primary"
                 }
             }).then(function (result) {
-                if (result.isConfirmed) { 
+                if (result.isConfirmed) {
                     $.ajax({
                         type: 'POST',
                         url: '/Appointment/ChangeStatus',
-                       data: appointmentData,  // Ensure data is serialized properly
+                        data: appointmentData,  
                         success: function (data) {
-                            if (data.success) { // Check if deletion is successful
+                            if (data.success) { 
                                 toastr["success"]("Appointment status changed successfully");
-                                // Remove the user row from the table
                             } else {
                                 toastr["error"]('An error occurred during the operation.');
                             }
@@ -610,7 +569,7 @@ function populateUserAndServiceDropdowns() {
                     });
                 }
             });
-            });
+        });
 
     </script>
 }

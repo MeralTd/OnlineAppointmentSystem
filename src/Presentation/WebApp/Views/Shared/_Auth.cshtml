@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,9 +96,7 @@
 	<!--end::Global Javascript Bundle-->
 	<!--begin::Vendors Javascript(used for this page only)-->
 	<script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-
-
-
+	@await Component.InvokeAsync("NToastNotify")
 
 
 	@await RenderSectionAsync("Scripts", required: false)

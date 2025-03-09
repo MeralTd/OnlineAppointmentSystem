@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Security.Hashing;
 
 namespace Persistence.Configurations;
 
@@ -21,6 +22,40 @@ public class UserEntityConfiguration : BaseConfiguration<UserEntity>
 
         builder.HasMany(u => u.UserOperationClaims);
 
+        builder.HasData(getSeeds());
+
+
         base.Configure(builder);
+    }
+
+
+    private HashSet<UserEntity> getSeeds()
+    {
+        int id = 0;
+        string password = "admin123";
+
+        HashingHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+
+
+        HashSet<UserEntity> seeds =
+            new()
+            {
+                new UserEntity {
+                    Id = ++id,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    Email = "admin@admin.com",
+                    PhoneNumber = "1234567890",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    IsActive = true,
+                    Type = Domain.Enums.UserEnums.UserTypeEnum.Admin
+
+                },
+
+
+            };
+
+        return seeds;
     }
 }

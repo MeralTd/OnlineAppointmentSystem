@@ -248,13 +248,7 @@
 		<!--begin::Vendors Javascript(used for this page only)-->
 	<script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 
-		<!--end::Vendors Javascript-->
-		<!--begin::Custom Javascript(used for this page only)-->
-@*	<script src="~/assets/js/widgets.bundle.js"></script>
-	<script src="~/assets/js/custom/widgets.js"></script>*@
-
-
-
+	@await Component.InvokeAsync("NToastNotify")
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

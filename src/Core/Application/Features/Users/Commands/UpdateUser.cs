@@ -14,7 +14,6 @@ public class UpdateUser : IRequest<IDataResult<UserDto>>
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
-    public bool IsActive { get; set; }
     public UserTypeEnum Type { get; set; }
     public GenderEnum Gender { get; set; }
 
@@ -40,7 +39,6 @@ public class UpdateUser : IRequest<IDataResult<UserDto>>
             user.LastName = request.LastName;
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
-            user.IsActive = request.IsActive;
             user.Type = request.Type;
             user.Gender = request.Gender;
             await _userRepository.UpdateAsync(user);

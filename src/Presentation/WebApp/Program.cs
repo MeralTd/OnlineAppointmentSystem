@@ -1,4 +1,5 @@
 using Application;
+using NToastNotify;
 using Persistence;
 using Security;
 using WebApp.Helper;
@@ -11,8 +12,15 @@ builder.Services.AddSecurityServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IUserSessionHelper, UserSessionHelper>();
+
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNToastNotifyNoty(new NotyOptions
+{
+    ProgressBar = true,
+    Timeout = 5000,
+    Theme = "mint"
+});
 
 builder.Services.AddSession(options =>
 {
@@ -23,6 +31,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication().AddCookie();
 
 var app = builder.Build();
+
+app.UseNToastNotify();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
